@@ -1,0 +1,22 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<form method="post" asp-controller="Product" asp-action="Add">
+    <div class="mb-3">
+        <!-- Use .mb-3 for margin bottom -->
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" name="name" class="form-control"> <!-- .form-control for styling -->
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Price:</label>
+        <input type="number" id="price" name="price" required class="form-control">
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea id="description" name="description" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Product</button> <!-- .btn and .btn-primary for styling -->
+</form>

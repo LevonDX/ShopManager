@@ -11,16 +11,13 @@ namespace ShopManager.Web.Controllers
     {
         private readonly IProductRepository _productRepository;
 
-        public HomeController(IProductRepository productRepository) // contructor injection
+        public HomeController(IProductRepository productRepository)
         {
             _productRepository = productRepository;
-
-
         }
 
         public IActionResult Index()
         {
-
             return View();
         }
 

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Product>
+
+@if (!String.IsNullOrEmpty(TempData["Message"]?.ToString()))
+{
+    <div class="alert alert-success">@TempData["Message"]?.ToString()</div>
+}
+
+<a asp-controller="Product" asp-action="Add">Add</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>
+                    @if (String.IsNullOrEmpty(product.Description))
+                    {
+                        <span class="text-danger">No Description</span>
+                    }
+                    else
+                    {
+                        <span class="text-info">@product.Description</span>
+                    }
+                </td>
+                <td>@product.Price.ToString("C")</td>
+                <td>
+                    <a asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id">Edit</a>
+                </td>
+                <td>
+                    <a asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

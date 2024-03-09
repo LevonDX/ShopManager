@@ -10,13 +10,11 @@ namespace ShopManager.Data.Concrete
 {
     public class EFProductRepository : IProductRepository, IDisposable
     {
-        private readonly string _connectionString;
         private readonly StoreDbContext _context;
 
-        public EFProductRepository(string connectionString)
+        public EFProductRepository(StoreDbContext dbContext)
         {
-            _connectionString = connectionString;
-            _context = new StoreDbContext(_connectionString);
+            _context = dbContext;
         }
 
         public async Task AddProductAsync(Product product)
@@ -25,9 +23,18 @@ namespace ShopManager.Data.Concrete
             await _context.SaveChangesAsync();
         }
 
-        public Task DeleteProductAsync(int id)
+        public async Task DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+           Product? pToDelete = await _context.Products.FindAsync(id);
+
+            if (pToDelete == null)
+            {
+                throw new InvalidOperationException("Product not found");
+            }
+
+            _context.Products.Remove(pToDelete);
+
+            await _context.SaveChangesAsync();
         }
 
         public void Dispose()
@@ -37,15 +44,14 @@ namespace ShopManager.Data.Concrete
 
         public IQueryable<Product> GetAllProductsAsync()
         {
-            using (var context = new StoreDbContext(_connectionString))
-            {
-                return context.Products.AsQueryable();
-            }
+            return _context.Products.AsQueryable();
         }
 
-        public Task<Product> GetProductByIdAsync(int id)
+        public async Task<Product?> GetProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            Product? product = await _context.Products.FindAsync(id);
+
+            return product;
         }
 
         public async Task UpdateProductAsync(Product product)

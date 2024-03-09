@@ -14,12 +14,20 @@ namespace ShopManager.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // Add DI for StoreDbContext
+            builder.Services.AddDbContext<StoreDbContext>(options =>
+            {
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+
+                options.UseSqlServer(connectionString);
+            });
+
             // Add DI for IProductRepository
             builder.Services.AddTransient<IProductRepository, EFProductRepository>(provider =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
 
-                return new EFProductRepository(connectionString);
+                return new EFProductRepository(provider.GetRequiredService<StoreDbContext>());
             });
 
             var app = builder.Build();
